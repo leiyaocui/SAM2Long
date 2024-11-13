@@ -738,6 +738,8 @@ class SAM2VideoPredictor(SAM2Base):
                     start_frame_idx=start_frame_idx,
                 )
                 output_dict[storage_key][frame_idx] = current_out
+
+            inference_state["frames_already_tracked"][frame_idx] = {"reverse": reverse}
         for frame_idx in range(start_frame_idx, max_frame_num_to_track):
             if frame_idx == start_frame_idx:
                 mask = self._get_orig_video_res_output(
@@ -758,8 +760,8 @@ class SAM2VideoPredictor(SAM2Base):
         # )
         # inference_state["frames_already_tracked"][frame_idx] = {"reverse": reverse}
 
-        # # Resize the output mask to the original video resolution (we directly use
-        # # the mask scores on GPU for output to avoid any CPU conversion in between)
+        # Resize the output mask to the original video resolution (we directly use
+        # the mask scores on GPU for output to avoid any CPU conversion in between)
         # _, video_res_masks = self._get_orig_video_res_output(
         #     inference_state, pred_masks
         # )
